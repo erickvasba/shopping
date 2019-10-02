@@ -1,0 +1,443 @@
+{% extends 'base.html'%}
+{% load static%}
+
+{% block title %}Shopping-Norte{% endblock %}
+{% block estilos %}
+<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Marmelad|Monoton" rel="stylesheet"> 
+
+<style type="text/css">
+	body{
+		background-color: rgba(235,237,159,0.4);
+	}
+
+	input{
+		border-radius: 4px 4px;
+		font-size: 30px;
+		color: rgba(10,10,200,0.9);
+		width: 220px;
+		height: 50px;
+		text-align: center;
+		font-family: 'Marmelad', sans-serif;
+		margin-bottom: 10px;
+	}
+
+	#boton{
+		border-radius: 50px 50px;
+		height: 90px;
+	}
+	label{
+		color: green;
+	}
+	#btn{
+		
+    width: 115px;
+    height: 35px;
+    
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+
+	}
+	#btn_ingreso{
+		background: rgb(42,184,31);
+		position: relative;
+		border-radius: 5px;
+    	color: white;
+    	font-weight: bold;
+    	font-size: 24px;
+    	width: 120px;
+    	height: 40px;
+	}
+	#btn_pagar{
+		background: rgb(184,84,31);
+		position: relative;
+		border-radius: 5px;
+    	color: white;
+    	font-weight: bold;
+    	font-size: 24px;
+    	width: 120px;
+    	height: 40px;
+	}
+	#btn_buscar{
+		background: rgb(18,14,101);
+		color: #fff;
+		margin-top: 8px;
+		font-size: 22px;
+		font-weight: bold;
+		border-radius: 5px;
+		width: 140px;
+
+	}
+
+
+	#titulo{
+		color: rgb(220,200,10);
+		background-color: rgba(20,20,20,1);
+		font-family: 'Monoton', cursive;
+		border-radius: 8px 8px;
+		text-align: center;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-top: 10px;
+		text-shadow: 2px 1px 10px #fff;
+		box-shadow: 2px 2px 4px #111;
+		border-bottom: solid 1px rgb(220,200,10);
+		border-left: solid 1px rgb(220,200,10);
+		border-right: solid 1px rgb(220,200,10);
+
+	}
+	#bs{
+		vertical-align: text-bottom;
+	}
+	#boton{
+		align-content: center;
+	}
+	#matricula{
+		text-transform: uppercase;
+	}
+	#matricula1{
+		border-bottom: 2px solid green;
+		background-color: rgba(200,200,200,0.4);
+		padding-top: 10px;
+		color: green;
+		font-weight: bold;
+		text-shadow: 1px 2px 2px #666;
+	}
+	#usuario{
+		height: 10px;
+		margin-top: -8px;
+		margin-left: 20px;
+		margin-bottom: 10px;
+		font-size: 10px;
+		color: rgba(10,10,10,0.5);
+	}
+	#autos{
+		background-color: rgba(255,255,250,1);
+		margin-right: 10px;
+		margin-bottom: 5px;
+		border-radius: 5px 5px 5px;
+		border: 2px solid #53a;
+		color:#53a;
+		font-weight: bold;
+		font-size: 22px;
+		text-shadow: 1px 1px 1px #999;
+		width: 170px;
+
+	}
+	#fecha{
+		font-size: 10px;
+	}
+	a{
+		text-decoration: none;
+		color:#eee;
+	}
+	a:hover{
+		text-decoration: none;
+		color:#eee;
+	}
+	span{
+		cursor:grab;
+	}
+	#xxx{
+		background-color: rgb(50,140,50);
+		border: 2px solid #eee;
+		border-radius: 5px 5px 5px;
+		color:#eee;
+		text-shadow: 1px 2px 2px #222;
+		font-weight: bold;
+		box-shadow: 2px 4px 4px #444;
+	}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div id="titulo">
+		<h3>SHOPPING NORTE</h3>
+		<small>P a r k i n g   T i c k e t</small>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<small id="usuario">Usuario: {{user}}</small>
+		</div>
+		
+	</div>
+</div>
+
+
+
+<div class="container-fluid">
+	<div class="row text-center">
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-lg-1"></div>
+				<div class="col-lg-10" id="matricula1">
+					<h3>Matrícula:</h3>
+				</div>
+				<div class="col-lg-1"></div>
+			</div><br>
+			
+			<!-- <input id="num" type="tel" name="" placeholder="1234" maxlength="4">-->
+			<div class="row">
+				<div class="col-lg-12">
+					<input id="matricula" type="text" name="" placeholder="--- ---" maxlength="9">		
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-1"></div>
+				<div class="col-lg-5">
+					<button id="btn_ingreso">Ingreso</button>
+				</div>
+				<div class="col-lg-5">
+					<button id="btn_pagar">Pagar</button>
+				</div>
+				<div class="col-lg-1"></div>
+			</div>
+			
+<br>
+			<div class="container-fluid" >
+
+				<div class="row">
+					<div class="col-lg-1"></div>
+					<div class="col-lg-10" id="xxx">
+						<div class="row">
+					<div class="col-lg-12"><div>Total a Pagar</div></div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 text-center" id="bs">
+						<small><h1><small>Bs. </small></h1></small>
+					</div>
+					<div class="col-md-5"><div id="pagar"></div></div>
+				</div>
+						
+					</div>
+					<div class="col-lg-1"></div>
+				</div>
+
+				
+
+			</div>
+
+		</div>
+		
+		<div class="col-md-8" id="mats_container">
+			{% if parking %}
+				<div class="row" id="matricula1">
+					<div class="col-lg-12">
+						<h3>Vehículos en Parking</h3>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+				{% for i in parking %}
+					<div class="col-lg-2" id="autos">
+						<div class="row">
+							<div class="col-lg-12" id="auto_mat">
+								<span>{{i}}</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12" id="fecha">
+									Ingreso: {{i.fecha_ingreso.date}} | {{i.fecha_ingreso.time}}
+							</div>	
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="row">
+					<div class="col-lg-12">
+						<h5>No existen Vehículos Registrados</h5>
+					</div>
+				</div>
+			{% endif %}
+				
+			</div>
+
+		</div>
+	</div>
+	
+
+</div>
+
+{% endblock %}
+
+{% block scripts%}
+<script>
+	$("#matricula").val("");
+	$("#lab").hide();
+	$("#xxx").hide();
+	
+$(document).ready(function(){
+
+//evento para hacer click en id=auto_mat
+	$("[id^='auto_ma']").click(function(){
+		var m=$(this).text().trim();
+		//mat=mat.substring(mat.length-4,mat.length-3);
+		mat=m.replace('-','');
+		//alert(mat);
+		$("#matricula").val(mat);
+		jsonobj=[]
+		jsonobj.push({'matricula':m});
+
+
+		//limpiamos 
+		$("#lab").hide();
+		$("#pagar").html("");
+
+		$.ajax({
+            type: "POST",
+            url: "{% url 'total_pagar' %}",
+            dataType: "json",
+            //data: {data:JSON.stringify({"data":[{"cod":123,"can":222}],"data2":[{"cod2":999,"can2":101010},{"cod22":"erick","can22":"ricardo"}]})},
+            data:{data:JSON.stringify(jsonobj)},
+            success: function(data_enviar, status, jqXHR) {
+                console.log("Status:--->"+JSON.stringify(data_enviar));
+
+                $("#lab").show();
+                $("#xxx").show();
+                
+                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>")
+
+
+
+                //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
+            },
+        });
+
+
+
+	});
+	
+
+
+	$("#btn_ingreso").click(function(){
+		var m=$("#matricula").val();
+		if (m===''){
+			alert("Ingrese Matricula ");
+		}
+		else{
+		var jsonobj=[];
+		var u='{{user}}';
+		var mat={};
+		var user={};
+
+		mat={'matricula':m};
+		user={'user':u};
+
+		jsonobj.push(mat);
+		jsonobj.push(user);
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'ingreso' %}",
+            dataType: "json",
+            //data: {data:JSON.stringify({"data":[{"cod":123,"can":222}],"data2":[{"cod2":999,"can2":101010},{"cod22":"erick","can22":"ricardo"}]})},
+            data:{data:JSON.stringify(jsonobj)},
+            success: function(data_enviar, status, jqXHR) {
+                console.log("Status:--->"+JSON.stringify(data_enviar));
+                if(data_enviar.status==='true'){
+                	alert("Datos Guardados...");
+                	$("#matricula").val("");
+                	$("#matricula1").html("");
+                	window.location.replace("{%url 'home'%}");
+                }
+                else{
+                	alert("No se puede Ingresar la Matricula");
+                	$("#matricula").val("");
+                	$("#matricula1").html("");
+                }
+                //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
+            },
+        });
+
+		}
+
+	});
+
+
+	$("#boton_pagar").click(function(){
+
+	});
+
+//evento para SALIDA de MATRICULA
+	$("#btn_pagar").click(function(){
+		var jsonobj=[];
+		var m=$("#matricula").val();
+		var u='{{user}}';
+		var mat={};
+		var user={};
+
+		mat={'matricula':m};
+		user={'user':u};
+
+		jsonobj.push(mat);
+		jsonobj.push(user);
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'salida' %}",
+            dataType: "json",
+            //data: {data:JSON.stringify({"data":[{"cod":123,"can":222}],"data2":[{"cod2":999,"can2":101010},{"cod22":"erick","can22":"ricardo"}]})},
+            data:{data:JSON.stringify(jsonobj)},
+            success: function(data_enviar, status, jqXHR) {
+                console.log("Status:--->"+JSON.stringify(data_enviar));
+                if(data_enviar.status==='true'){
+                	$("#lab").show();
+                	$("#pagar").show();
+                	$("#pagar_total").append("<h1>"+data_enviar.pagar+"</h1>")
+                	alert("Datos Reportados Satisfactorimanete");
+                	window.location.replace("{%url 'home'%}");
+                }
+                else{
+                	alert("No se puede Registrar Salida la Matricula");
+                	$("#matricula").val("");
+                }
+                //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
+            },
+        });
+	});
+
+
+
+/////////////////////////////////FIN SALIDA
+	    // CSRF code
+function getCookie(name) {
+  var cookieValue = null;
+  var i = 0;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (i; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+// these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+  crossDomain: false, // obviates need for sameOrigin test
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type)) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+  }
+});
+})
+</script>
+{%endblock%}
+
