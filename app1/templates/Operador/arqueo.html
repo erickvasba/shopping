@@ -1,4 +1,4 @@
-{% extends 'base_admin.html'%}
+{% extends 'Operador/base.html'%}
 {% load static %}
 
 {% block title %}Ingresos{% endblock %}
@@ -14,47 +14,53 @@
 
 {% block content %}
 
-
+<div class="container-fluid">
+	<div id="titulo">
+		<h3>SHOPPING NORTE</h3>
+		<small>P a r k i n g   T i c k e t</small>
+	</div>
+</div>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-lg-4">
-			<div class="row">
-				<div class="col-lg-12"><h4>Seleccione Fecha</h4></div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<label for="fi">Desde:</label>
-					<input type="text" name="" id="fi">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<label for="fs">Hasta:</label>
-					<input type="text" name="" id="fs">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<input type="button" name="" value="Buscar">
-				</div>		
-			</div>
+		<div class="col-lg-12">
+			<small id="usuario">Usuario: {{user}}</small>
 		</div>
 		
+	</div>
+</div>
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<h2>Arqueo dia |</h2>
+		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-lg-2"><h5>Matrícula</h5></div>
+		<div class="col-lg-2"><h5>Fecha Pago</h5></div>
 		<div class="col-lg-2"><h5>Pago Bs.</h5></div>
-		<div class="col-lg-2"><h5>Fecha</h5></div>
 	</div>
-	{% for i in p %}
+	{% for i in mat %}
 		<div class="row">
-			<div class="col-lg-2">{{i.matricula}}</div>
-			<div class="col-lg-2">{{i.pago}}</div>
-			<div class="col-lg-2">{{i.fecha}}</div>
+			<div class="col-lg-2">{{i.mat.matricula}}</div>
+			<div class="col-lg-2">{{i.mat.fecha}}</div>
+			<div class="col-lg-2">{{i.pagar}}</div>
 		</div>
 	
 	{% endfor %}
+
+	<hr>
+	<div class="row">
+		<div class="col-lg-12">
+			<h4>Total Ingresos: {{total}}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<br><br><br><br>
+		</div>
+	</div>
 
 	
 

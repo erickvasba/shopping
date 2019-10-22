@@ -24,7 +24,9 @@ def index(request):
 	return redirect('login')
 
 
+####VIEWS OPERADOR
 @login_required
+@group_required('Operador','Admin')
 def home(request):
 	usuario=request.user
 	##agarramos GRUPO de Usuario
@@ -33,88 +35,36 @@ def home(request):
 	except:
 		print "-> Usuario no tiene GRUPO!!!"
 		grupo="Visita"
-
-
 	if usuario.is_authenticated():
 		if str(grupo)=='Operador':
 			p=Parking.objects.filter(abierto=True).order_by('-fecha_ingreso')
-
-
+			#seleccionamos laas ultimas salidas
+			salidas=Parking.objects.filter(abierto=False,fecha_salida__date=datetime.datetime.now().date()).order_by('-fecha_salida')[:10]
 			cont=({
 				'parking':p,
 				'user':usuario.username,
+				'salidas':salidas
 				})
-			t=get_template('home.html')
-			html=t.render()
-			return render(request,'home.html',cont)
+			
+			return render(request,'Operador/home.html',cont)
 
 		elif str(grupo)=='Administrador':
 			return redirect('administrador')
 
 		else:
 			return HttpResponse("Visita")
-
-
 	else:
 		return redirect('login')
 
-
-#########admin############
-
-def administrador(request):
-	if request.method=='POST':
-		pass
-	else:
-		mat=[]
-		total=0
-		t=get_template('index.html')
-
-		p=Parking.objects.filter(fecha_ingreso__date=datetime.datetime.now().date())
-		for i in p:
-			pp=pagar_(i.matricula)
-			mat.append({'mat':i,'pagar':pp})
-			total=total+pp
-
-
-
-		cont=({
-			'p':p,
-			'mat':mat,
-			'total':total
-			})
-		html=t.render(cont)
-
-		return HttpResponse(html)
-
-
-##########fin admin ######
-
-def ingresos(request):
-	if request.method=='POST':
-		pass
-	else:
-		t=get_template('ingresos.html')
-		p=Pagos.objects.all().order_by('-fecha')
-
-		cont=({
-			'p':p,
-			})
-
-		html=t.render(cont)
-
-		return HttpResponse(html)
-
-
+@login_required
+@group_required('Operador')
 def ingreso(request):
 	r={}
 	usuario=request.user.username
 	if request.is_ajax() and request.POST:
-
 		data_js=request.POST.get('data')
 		data_dc=json.loads(data_js)
-
 		mat=str(data_dc[0]['matricula']).upper()
-
 		if len(mat)==6:
 			num=mat[0:3]
 			letra=mat[3:6]
@@ -125,27 +75,19 @@ def ingreso(request):
 			matricula=num+"-"+letra
 		else:
 			matricula=mat
-
 		user=str(data_dc[1]['user'])
-
 		print matricula+"<->"+user
-
 		try: ##vemos si la matricula esta en parking
 			p=Parking.objects.filter(matricula=matricula)
 			time_in=datetime.datetime.now()
 			if p.last(): #si EXISTE 
-
 				if (p.last().fecha_salida): #si tiene fecha de SALIDA, PODEMOS GUARDAR
-					
-
 					park=Parking.objects.create(matricula=matricula,user=user,fecha_ingreso=time_in)
 					park.save()
-
 					r.update({'status':"true"})
 				else: # si no salio, NO podemos volver a guardar
 					print "No se puede volver a INgresar"
 					r.update({'status':"false"})
-
 			else: ##si no existe PODEMOS GUARDAR
 				park=Parking.objects.create(matricula=matricula,user=user,fecha_ingreso=time_in)
 				park.save()
@@ -153,10 +95,137 @@ def ingreso(request):
 				r.update({'status':"true"})
 		except:
 			print "eroor en query!!!"
-			
 	js_resp=json.dumps(r)
-
 	return HttpResponse(js_resp, content_type='application/json')
+@login_required
+@group_required('Operador')
+def salida(request):
+	r={}
+
+	if request.is_ajax() and request.POST:
+		data_js=request.POST.get('data')
+		data_dc=json.loads(data_js)
+##en mayusculas
+		mat=str(data_dc[0]['matricula']).upper()
+		print "++++"+mat
+		if len(mat)==6:
+			num=mat[0:3]
+			letra=mat[3:6]
+			matricula=num+"-"+letra
+		elif len(mat)==7:
+			num=mat[0:4]
+			letra=mat[4:7]
+			matricula=num+"-"+letra
+		else:
+			matricula=mat
+		p=Parking.objects.filter(matricula=matricula)
+		if p.last():
+			if(p.last().fecha_salida):	##si ya tiene fecha de salida no puede volver a salir
+				print "no se puede realizar registro la Matricula Ya salio!!!"
+				r.update({'status':"false"})
+			else: ## si no tiene fecha de salida podemos realizar salida
+				park=Parking.objects.get(matricula=matricula)
+				t=datetime.datetime.now()
+				park.fecha_salida=t
+				park.abierto=False
+				park.save()
+				total=pagar_(matricula)
+				r.update({'status':'true','pagar':total})
+				##guardamoes le pago
+				pp=Pagos.objects.create(matricula=park,pago=total)
+		else: ## SI NO EXISTE no podemos guardar
+			print "NO SE puede realizar registro de salida, por que la matricula no ingreso"
+			r.update({'status':'false'})
+	js_resp=json.dumps(r)
+	return HttpResponse(js_resp, content_type='application/json')
+
+def arqueo (request):
+	u=request.user.username
+	if request.method=='POST':
+		pass
+	else:
+		mat=[]
+		total=0
+		fecha=datetime.datetime.now().date()
+		p=Parking.objects.filter(fecha_salida__date=datetime.datetime.now().date())
+		t=get_template('Operador/arqueo.html')
+
+		for i in p:
+			pp=pagar_(i.matricula)
+			mat.append({'mat':i,'pagar':pp})
+			total=total+pp
+
+		cont=({
+			'p':p,
+			'user':u,
+			'mat':mat,
+			'fecha':fecha,
+			'total':total
+		})
+
+		html=t.render(cont)
+
+		return HttpResponse (html)
+
+#########VIEWS ADMIN############
+
+def administrador(request): ##INICIO
+	u=request.user.username
+	if request.method=='POST':
+		pass
+	else:
+		mat=[]
+		total=0
+		t=get_template('Admin/index.html') # for admin
+
+		p=Parking.objects.filter(abierto=True)
+		for i in p:
+			pp=pagar_(i.matricula)
+			mat.append({'mat':i,'pagar':pp})
+			total=total+pp
+
+		cont=({
+			'p':p,
+			'user':u,
+			'mat':mat,
+			'total':total
+			})
+		html=t.render(cont)
+
+		return HttpResponse(html)
+
+
+##########fin admin ######
+
+def ingresos(request):  #ARQUEO para ADMIN
+	u=request.user.username
+	if request.method=='POST':
+		pass
+	else:
+		mat=[]
+		total=0
+		fecha=datetime.datetime.now().date()
+		t=get_template('arqueo.html')
+		p=Pagos.objects.filter(fecha__date=datetime.datetime.now().date())
+
+		for i in p:
+			pp=pagar_(i.matricula)
+			mat.append({'mat':i,'pagar':pp})
+			total=total+pp
+
+		cont=({
+			'p':p,
+			'user':u,
+			'mat':mat,
+			'fecha':fecha,
+			'total':total
+		})
+
+		html=t.render(cont)
+
+		return HttpResponse(html)
+
+
 
 def imprimir_ticket(x,y):
 	c=0
@@ -189,72 +258,6 @@ def imprimir_ticket(x,y):
 	except:
 		print"no se pudo imprimir"
 
-def salida(request):
-	r={}
-
-	if request.is_ajax() and request.POST:
-		data_js=request.POST.get('data')
-		data_dc=json.loads(data_js)
-##en mayusculas
-		mat=str(data_dc[0]['matricula']).upper()
-		print "++++"+mat
-
-		if len(mat)==6:
-			num=mat[0:3]
-			letra=mat[3:6]
-			matricula=num+"-"+letra
-		elif len(mat)==7:
-			num=mat[0:4]
-			letra=mat[4:7]
-			matricula=num+"-"+letra
-		else:
-			matricula=mat
-
-		p=Parking.objects.filter(matricula=matricula)
-
-		if p.last():
-			if(p.last().fecha_salida):	##si ya tiene fecha de salida no puede volver a salir
-				print "no se puede realizar registro la Matricula Ya salio!!!"
-				r.update({'status':"false"})
-			else: ## si no tiene fecha de salida podemos realizar salida
-				park=Parking.objects.get(matricula=matricula)
-				t=datetime.datetime.now()
-				park.fecha_salida=t
-				park.abierto=False
-				park.save()
-				total=pagar_(matricula)
-				r.update({'status':'true','pagar':total})
-				##guardamoes le pago
-				pp=Pagos.objects.create(matricula=park,pago=total)
-		else: ## SI NO EXISTE no podemos guardar
-			print "NO SE puede realizar registro de salida, por que la matricula no ingreso"
-			r.update({'status':'false'})
-
-	js_resp=json.dumps(r)
-
-	return HttpResponse(js_resp, content_type='application/json')
-
-
-def pagar(x):
-	p=Parking.objects.get(matricula=x)
-	inicio=p.fecha_ingreso
-	salida=p.fecha_salida
-
-	total_seconds=(salida-inicio).total_seconds()
-
-	total_horas=total_seconds/3600
-
-	total_pagar=round(total_horas*8,2)
-
-
-	#try:
-	#	pago=Pagos.objects.create(matricula=p,pago=total_pagar)
-	#	pago.save()
-	#except:
-	#	print " no se puede guradar el PAGO"
-
-
-	return total_pagar
 
 def total_pagar(request):
 	r={}
@@ -325,7 +328,7 @@ def total_pagar(request):
 
 def pagar_(x):
 	p=Parking.objects.get(matricula=x)
-	print p
+	##print p
 	inicio=p.fecha_ingreso
 	salida=p.fecha_salida
 	i=time.mktime(inicio.timetuple())
@@ -333,6 +336,7 @@ def pagar_(x):
 	now=datetime.datetime.now()
 	s=time.mktime(now.timetuple())
 	total_seconds=s-i
+
 
 	if total_seconds<=2400:
 		total_pagar=5
