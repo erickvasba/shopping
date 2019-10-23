@@ -23,7 +23,6 @@ from app1.decorators import *
 def index(request):
 	return redirect('login')
 
-
 ####VIEWS OPERADOR
 @login_required
 @group_required('Operador','Admin')
@@ -55,6 +54,8 @@ def home(request):
 			return HttpResponse("Visita")
 	else:
 		return redirect('login')
+
+##for ajax request
 
 @login_required
 @group_required('Operador')
@@ -97,6 +98,8 @@ def ingreso(request):
 			print "eroor en query!!!"
 	js_resp=json.dumps(r)
 	return HttpResponse(js_resp, content_type='application/json')
+
+
 @login_required
 @group_required('Operador')
 def salida(request):
@@ -301,22 +304,14 @@ def total_pagar(request):
 			total_pagar=18.50
 		elif (total_seconds>=16200 and total_seconds<=1800):
 			total_pagar=20
-		elif (total_seconds>=18000 and total_seconds<=21600):
-			total_pagar=22
-		elif (total_seconds>=21600 and total_seconds<=25200):
-			total_pagar=24
-		elif (total_seconds>=25200 and total_seconds<=28800):
-			total_pagar=26
-		elif (total_seconds>=28800 and total_seconds<=32400):
-			total_pagar=28
-		elif (total_seconds>=32400 and total_seconds<=36000):
-			total_pagar=30
-		elif (total_seconds>=36000 and total_seconds<=39600):
-			total_pagar=32
-		elif (total_seconds>=39600 and total_seconds<=43200):
-			total_pagar=24
+		
 		else:
-			total_pagar=100
+			segundos_adicionales=total_seconds-16200
+			horas_adicionales=segundos_adicionales/3600
+
+			horas_pagar=round(horas_adicionales)*2
+
+			total_pagar=20+horas_pagar
 
 		#total_horas=total_seconds/3600
 		#total_pagar=round(total_horas*8,2)
@@ -358,22 +353,16 @@ def pagar_(x):
 		total_pagar=18.50
 	elif (total_seconds>=16200 and total_seconds<=1800):
 		total_pagar=20
-	elif (total_seconds>=18000 and total_seconds<=21600):
-		total_pagar=22
-	elif (total_seconds>=21600 and total_seconds<=25200):
-		total_pagar=24
-	elif (total_seconds>=25200 and total_seconds<=28800):
-		total_pagar=26
-	elif (total_seconds>=28800 and total_seconds<=32400):
-		total_pagar=28
-	elif (total_seconds>=32400 and total_seconds<=36000):
-		total_pagar=30
-	elif (total_seconds>=36000 and total_seconds<=39600):
-		total_pagar=32
-	elif (total_seconds>=39600 and total_seconds<=43200):
-		total_pagar=24
+
+##si es mayor a 18000() 5 horas
 	else:
-		total_pagar=100
+		segundos_adicionales=total_seconds-16200
+		horas_adicionales=segundos_adicionales/3600
+
+		horas_pagar=round(horas_adicionales)*2
+
+		total_pagar==20+horas_pagar
+
 
 	return total_pagar
 

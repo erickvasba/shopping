@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns=[
 ##admin
-	url(r'^$',views.index, name='index'),
+	url(r'^$',views.index, name='index2'),
 	url(r'^administrador/',views.administrador, name='administrador'),
 	url(r'^ingresos/',views.arqueo, name='ingresos'),
 ##operador
