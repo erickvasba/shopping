@@ -38,11 +38,11 @@ def home(request):
 		if str(grupo)=='Operador':
 			p=Parking.objects.filter(abierto=True).order_by('-fecha_ingreso')
 			#seleccionamos laas ultimas salidas
-			salidas=Parking.objects.filter(abierto=False,fecha_salida__date=datetime.datetime.now().date()).order_by('-fecha_salida')[:10]
+			
 			cont=({
 				'parking':p,
 				'user':usuario.username,
-				'salidas':salidas
+				
 				})
 			
 			return render(request,'Operador/home.html',cont)
@@ -142,6 +142,8 @@ def salida(request):
 	js_resp=json.dumps(r)
 	return HttpResponse(js_resp, content_type='application/json')
 
+@login_required
+@group_required('Operador')
 def arqueo (request):
 	u=request.user.username
 	if request.method=='POST':
@@ -150,18 +152,16 @@ def arqueo (request):
 		mat=[]
 		total=0
 		fecha=datetime.datetime.now().date()
-		p=Parking.objects.filter(fecha_salida__date=datetime.datetime.now().date())
+		#p=Parking.objects.filter(fecha_salida__date=datetime.datetime.now().date())
+		p=Pagos.objects.filter(fecha__date=fecha)
 		t=get_template('Operador/arqueo.html')
 
 		for i in p:
-			pp=pagar_(i.matricula)
-			mat.append({'mat':i,'pagar':pp})
-			total=total+pp
+			total=total+ i.pago
 
 		cont=({
 			'p':p,
 			'user':u,
-			'mat':mat,
 			'fecha':fecha,
 			'total':total
 		})
@@ -169,6 +169,31 @@ def arqueo (request):
 		html=t.render(cont)
 
 		return HttpResponse (html)
+@login_required
+@group_required('Operador')
+def salidas(request):
+	user=request.user
+	if request.method=="POST":
+		pass
+	else:
+		salidas=Parking.objects.filter(abierto=False,fecha_salida__date=datetime.datetime.now().date()).order_by('-fecha_salida')[:20]
+		f=datetime.datetime.now().date()
+		t=get_template('Operador/salidas.html')
+
+		cont=({
+			'salidas':salidas,
+			'user':user,
+			'fecha':f,
+
+		})
+
+		html=t.render(cont)
+
+		return HttpResponse(html)
+
+
+
+
 
 #########VIEWS ADMIN############
 
@@ -270,9 +295,6 @@ def total_pagar(request):
 		x=data_d[0]['matricula'].upper()
 
 		print x
-
-
-
 		p=Parking.objects.get(matricula=x)
 		print p
 		inicio=p.fecha_ingreso
@@ -306,16 +328,18 @@ def total_pagar(request):
 			total_pagar=20
 		
 		else:
-			segundos_adicionales=total_seconds-16200
+			segundos_adicionales=total_seconds-18000
 			horas_adicionales=segundos_adicionales/3600
 
 			horas_pagar=round(horas_adicionales)*2
 
 			total_pagar=20+horas_pagar
 
+		minutos=round(total_seconds/60)
+
 		#total_horas=total_seconds/3600
 		#total_pagar=round(total_horas*8,2)
-		r.update({'pagar':total_pagar})
+		r.update({'pagar':total_pagar,'min':minutos})
 
 		resp_j=json.dumps(r)
 
@@ -356,12 +380,12 @@ def pagar_(x):
 
 ##si es mayor a 18000() 5 horas
 	else:
-		segundos_adicionales=total_seconds-16200
+		segundos_adicionales=total_seconds-18000
 		horas_adicionales=segundos_adicionales/3600
 
 		horas_pagar=round(horas_adicionales)*2
 
-		total_pagar==20+horas_pagar
+		total_pagar=20+horas_pagar
 
 
 	return total_pagar

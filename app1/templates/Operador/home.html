@@ -2,7 +2,18 @@
 {% load static%}
 
 {% block title %}Shopping-Norte{% endblock %}
+
 {% block estilos %}
+<style type="text/css">
+	#data{
+		font-size: 12px;
+	}
+
+	#data:nth-child(even){
+		background-color: rgba(20,130,12,0.2);
+
+	}
+</style>
 
 {% endblock %}
 
@@ -60,28 +71,33 @@
 					<div class="col-lg-1"></div>
 					<div class="col-lg-10" id="xxx">
 						<div class="row">
-					<div class="col-lg-12"><div>Total a Pagar</div></div>
-				</div>
-				<div class="row">
-					<div class="col-md-5 text-center" id="bs">
-						<small><h1><small>Bs. </small></h1></small>
-					</div>
-					<div class="col-md-5"><div id="pagar"></div></div>
-				</div>
-						
+							<div class="col-lg-12"><div>Total a Pagar</div></div>
+						</div>
+						<div class="row">
+							<div class="col-md-3"></div>
+							<div class="col-md-2 text-center" id="bs">
+								<small><h1><small>Bs. </small></h1></small>
+							</div>
+							<div class="col-md-5"><div id="pagar"></div></div>
+						</div>
+						<div class="row">
+							<div class="col-md-3"></div>
+							<div class="col-md-2 text-center" id="bs">
+								<small><h1><small>Min. </small></h1></small>
+							</div>
+							<div class="col-md-5"><div id="min"></div></div>
+							
+						</div>
 					</div>
 					<div class="col-lg-1"></div>
 				</div>
+				<br>
 				<div class="row">
 					<div class="col-lg-12">
 						
 					</div>
 				</div>
-
-				
-
 			</div>
-
 		</div>
 		
 		<div class="col-md-8" id="mats_container">
@@ -90,7 +106,10 @@
 					<div class="col-lg-9">
 						<h3>Vehículos en Parking</h3>
 					</div>
-					<div class="col-lg-3">
+					<div class="col-lg-1">
+						<a href="{% url 'salidas'%}" style="color:blue">Salidas</a>
+					</div>
+					<div class="col-lg-1">
 						<a href="{% url 'arqueo'%}" style="color:blue">Arqueo</a>
 					</div>
 				</div>
@@ -103,10 +122,15 @@
 								<span>{{i}}</span>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row text-center">
 							<div class="col-lg-12" id="fecha">
-									Ingreso: {{i.fecha_ingreso.date}} | {{i.fecha_ingreso.time}}
-							</div>	
+									{{i.fecha_ingreso.date}} | {{i.fecha_ingreso.time}}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								
+							</div>
 						</div>
 					</div>
 				{% endfor %}
@@ -120,30 +144,20 @@
 				
 			</div>
 
+
+			<div class="row">
+
+				
+			</div>
+
 		</div>
 	</div>
 	
 
 </div>
 <br>
-<div class="container-fluid">
-	<div class="row"><h4>Ultimas Salídas</h4></div>
-	<div class="row">
-		<div class="col-lg-3">Mátricula</div>
-		<div class="col-lg-3">Salida</div>
-		
-	</div>
-	<hr>
-	{% for i in salidas %}
-	<div class="row">
-		
-			<div class="col-lg-3">{{i.matricula}}</div>
-			<div class="col-lg-3">{{i.fecha_salida}}</div>
-			
-		
-	</div>
-	{% endfor %}
-</div>
+
+
 
 {% endblock %}
 
@@ -169,6 +183,7 @@ $(document).ready(function(){
 		//limpiamos 
 		$("#lab").hide();
 		$("#pagar").html("");
+		$("#min").html("");
 
 		$.ajax({
             type: "POST",
@@ -182,7 +197,8 @@ $(document).ready(function(){
                 $("#lab").show();
                 $("#xxx").show();
                 
-                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>")
+                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>");
+                $("#min").append("<h1>"+data_enviar.min+"</h1>");
 
 
 

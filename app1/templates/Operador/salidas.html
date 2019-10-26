@@ -1,0 +1,79 @@
+{% extends 'Operador/base.html'%}
+{% load static %}
+
+{% block title %}Salidas{% endblock %}
+
+{% block estilos %}
+<style type="text/css">
+		#table_header{
+		background-color: rgba(23,30,123,0.7);
+		padding-top: 5px;
+		color:#eee;
+		text-align: center;
+
+	}
+	#data{
+		font-size: 14px;
+		text-align: center;
+	}
+	#data:nth-child(even){
+		background-color: rgba(123,231,123,0.2);
+	}
+		a{
+		color: blue;
+	}
+	a:hover{
+		color:blue;
+		font-weight: bold;
+	}
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+	<div id="titulo">
+		<h3>SHOPPING NORTE</h3>
+		<small>P a r k i n g   T i c k e t</small>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<small id="usuario">Usuario: {{user}}</small>
+		</div>
+		
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row text-center" id="matricula1">
+		<div class="col-lg-1"></div>
+		<div class="col-lg-10">
+			<h3>Ultimas Salidas {{fecha}}</h3>
+		</div>
+		<div class="col-lg-1"><a href="{% url 'home'%}">Atras</a></div>
+	</div>
+<br>
+	<div class="row" >
+		<div class="col-lg-3"></div>
+		<div class="col-lg-6">
+			<div class="row" id="table_header">
+				<div class="col-lg-3"><h5>Matrícula</h5></div>
+				<div class="col-lg-6"><h5>Fecha Salida</h5></div>
+			</div>
+			{% for i in salidas %}
+				<div class="row" id="data">
+					<div class="col-lg-3">{{i.matricula}}</div>
+					<div class="col-lg-6">{{i.fecha}}</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="col-lg-3"></div>
+		
+	</div>
+</div>
+
+
+{% endblock %}

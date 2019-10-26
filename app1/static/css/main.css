@@ -119,7 +119,12 @@
 
 	}
 	#fecha{
-		font-size: 10px;
+		font-size: 12px;
+		margin:2px -4px 2px -4px;
+	}
+	#min{
+		font-size: 12px;
+		margin:-5px;
 	}
 	a{
 		text-decoration: none;

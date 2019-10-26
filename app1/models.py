@@ -27,7 +27,7 @@ class Vitacora(models.Model):
 
 class Pagos(models.Model):
 	matricula=models.ForeignKey(Parking,on_delete=models.CASCADE)
-	pago=models.CharField(max_length=10)
+	pago=models.IntegerField()
 	fecha=models.DateTimeField(auto_now=True)
 
 class Contrato(models.Model):

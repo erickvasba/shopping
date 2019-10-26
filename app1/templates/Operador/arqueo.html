@@ -9,6 +9,41 @@
 	#fi, #fs{
 		width: 110px;
 	}
+	#total_ingresos{
+		background-color: rgb(50,140,50);
+		border:solid 2px;
+		border-radius: 5px 5px 5px 5px;
+		border-color: #222;
+		padding-top: 5px;
+		text-align: center;
+		box-shadow: rgb(10,10,10) 3px 3px 5px;
+		color:#eee;
+		text-shadow: #111 3px 3px 3px;
+		font-weight: bold;
+
+
+	}
+	#table_header{
+		background-color: rgba(23,30,123,0.7);
+		padding-top: 5px;
+		color:#eee;
+		text-align: center;
+
+	}
+	#data{
+		font-size: 14px;
+		text-align: center;
+	}
+	#data:nth-child(even){
+		background-color: rgba(123,231,123,0.2);
+	}
+	a{
+		color: blue;
+	}
+	a:hover{
+		color:blue;
+		font-weight: bold;
+	}
 </style>
 {% endblock %}
 
@@ -28,33 +63,45 @@
 		
 	</div>
 </div>
-<div class="container-fluid">
+<div class="container">
 
 	<div class="row">
-		<div class="col-lg-12">
-			<h2>Arqueo dia |</h2>
+		<div class="col-lg-10">
+			<h2>Arqueo dia {{fecha}}</h2>
 		</div>
+		<div class="col-lg-2"><a href="{% url 'home'%}">Atras</a></div>
 	</div>
 	<hr>
-	<div class="row">
-		<div class="col-lg-2"><h5>Matrícula</h5></div>
-		<div class="col-lg-2"><h5>Fecha Pago</h5></div>
-		<div class="col-lg-2"><h5>Pago Bs.</h5></div>
-	</div>
-	{% for i in mat %}
-		<div class="row">
-			<div class="col-lg-2">{{i.mat.matricula}}</div>
-			<div class="col-lg-2">{{i.mat.fecha}}</div>
-			<div class="col-lg-2">{{i.pagar}}</div>
+	<div class="row" >
+		<div class="col-lg-8">
+			<div class="row" id="table_header">
+				<div class="col-lg-3"><h5>Matrícula</h5></div>
+				<div class="col-lg-3" style="border-right: #eee solid 2px; border-left: #eee solid 2px;"><h5>Pago en Bs.</h5></div>
+				<div class="col-lg-6"><h5>Fecha Pago</h5></div>
+				
+			</div>
+			{% for i in p %}
+				<div class="row" id="data">
+					<div class="col-lg-3">{{i.matricula}}</div>
+					<div class="col-lg-3">{{i.pago}}</div>
+					<div class="col-lg-6">{{i.fecha}}</div>
+				</div>
+			{% endfor %}
 		</div>
-	
-	{% endfor %}
+		<div class="col-lg-4"></div>
+		
+	</div>
+
+
+
+
 
 	<hr>
 	<div class="row">
-		<div class="col-lg-12">
-			<h4>Total Ingresos: {{total}}</h4>
+		<div class="col-lg-5" id="total_ingresos">
+			<h3>Total Ingresos: Bs. {{total}}</h3>
 		</div>
+		<div class="col-lg-7"></div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">

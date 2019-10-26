@@ -10,6 +10,7 @@ urlpatterns=[
 ##operador
 	url(r'^home/',views.home, name='home'),
 	url(r'^arqueo/',views.arqueo, name='arqueo'),
+	url(r'^salidas/',views.salidas, name='salidas'),
 	url(r'^ingreso/',views.ingreso, name='ingreso'),
 	url(r'^salida/',views.salida, name='salida'),
 	url(r'^total_pagar/',views.total_pagar, name='total_pagar'),
