@@ -7,6 +7,15 @@ urlpatterns=[
 	url(r'^$',views.index, name='index2'),
 	url(r'^administrador/',views.administrador, name='administrador'),
 	url(r'^ingresos/',views.arqueo, name='ingresos'),
+	url(r'^arqueo_admin/$',views.arqueo_admin, name='arqueo_admin'),
+	url(r'^arqueo_admin/(?P<data>[\w\-]+)/$',views.toExcel, name='toExcel'),
+	
+
+	
+	
+
+	#URL AJAX
+	
 ##operador
 	url(r'^home/',views.home, name='home'),
 	url(r'^arqueo/',views.arqueo, name='arqueo'),

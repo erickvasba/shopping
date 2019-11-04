@@ -81,12 +81,7 @@
 							<div class="col-md-5"><div id="pagar"></div></div>
 						</div>
 						<div class="row">
-							<div class="col-md-3"></div>
-							<div class="col-md-2 text-center" id="bs">
-								<small><h1><small>Min. </small></h1></small>
-							</div>
-							<div class="col-md-5"><div id="min"></div></div>
-							
+							<div class="col-md-12"><div id="min"></div></div>
 						</div>
 					</div>
 					<div class="col-lg-1"></div>
@@ -198,7 +193,7 @@ $(document).ready(function(){
                 $("#xxx").show();
                 
                 $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>");
-                $("#min").append("<h1>"+data_enviar.min+"</h1>");
+                $("#min").append("<h1>"+data_enviar.horas+"hrs. - "+data_enviar.min+"min.</h1>");
 
 
 
@@ -257,8 +252,9 @@ $(document).ready(function(){
 	});
 
 
-	$("#boton_pagar").click(function(){
-
+	$("#matricula").click(function(){
+		$(this).val("");
+		$("#xxx").hide();
 	});
 
 //evento para SALIDA de MATRICULA
@@ -298,8 +294,6 @@ $(document).ready(function(){
             },
         });
 	});
-
-
 
 /////////////////////////////////FIN SALIDA
 	    // CSRF code

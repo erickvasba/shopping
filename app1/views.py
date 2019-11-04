@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User, Group
 
-from app1.forms import Ingreso
+from app1.forms import Ingreso, Buscar
 from app1.models import *
 import json
 import datetime
@@ -16,6 +16,9 @@ import time
 ### ESCPOS
 from escpos.printer import Usb
 from app1.decorators import *
+
+##EXCEL
+import xlwt
 
 
 # Create your views here.
@@ -25,7 +28,7 @@ def index(request):
 
 ####VIEWS OPERADOR
 @login_required
-@group_required('Operador','Admin')
+@group_required('Operador','Administrador')
 def home(request):
 	usuario=request.user
 	##agarramos GRUPO de Usuario
@@ -143,7 +146,7 @@ def salida(request):
 	return HttpResponse(js_resp, content_type='application/json')
 
 @login_required
-@group_required('Operador')
+@group_required('Operador',"Administrador")
 def arqueo (request):
 	u=request.user.username
 	if request.method=='POST':
@@ -179,24 +182,17 @@ def salidas(request):
 		salidas=Parking.objects.filter(abierto=False,fecha_salida__date=datetime.datetime.now().date()).order_by('-fecha_salida')[:20]
 		f=datetime.datetime.now().date()
 		t=get_template('Operador/salidas.html')
-
 		cont=({
 			'salidas':salidas,
 			'user':user,
 			'fecha':f,
-
 		})
-
 		html=t.render(cont)
-
 		return HttpResponse(html)
 
-
-
-
-
 #########VIEWS ADMIN############
-
+@login_required
+@group_required('Administrador')
 def administrador(request): ##INICIO
 	u=request.user.username
 	if request.method=='POST':
@@ -221,7 +217,120 @@ def administrador(request): ##INICIO
 		html=t.render(cont)
 
 		return HttpResponse(html)
+@login_required
+@group_required('Administrador')
+def arqueo_admin(request):
+	u=request.user
+	if request.method=='POST':
+		f=Buscar(request.POST)
+		if f.is_valid():
+			total=0
+			fecha=datetime.datetime.now().date().strftime("%Y-%m-%d")
+			fecha_a_buscar=f.cleaned_data.get("fecha_buscar")
+			p=Pagos.objects.filter(fecha__date=fecha_a_buscar)
+			for i in p:
+				total=total+i.pago
 
+			fb=Buscar()
+
+			t=get_template('Admin/arqueo_admin.html')
+			cont=({
+				'p':p,
+				'user':u,
+				'fecha':fecha_a_buscar,
+				'fb':fb,
+				'total':total
+				})
+			
+			return render(request,'Admin/arqueo_admin.html',cont)
+		else:
+			return redirect("arqueo_admin")
+	else:
+		total=0
+		fecha=datetime.datetime.now().date().strftime("%Y-%m-%d")
+		#p=Parking.objects.filter(fecha_salida__date=datetime.datetime.now().date())
+		p=Pagos.objects.filter(fecha__date=fecha)
+		fb=Buscar()
+
+		for i in p:
+			total=total+ i.pago
+
+		cont=({
+			'p':p,
+			'user':u,
+			'fecha':fecha,
+			'total':total,
+			'fb':fb
+		})
+		return render (request,'Admin/arqueo_admin.html',cont)
+
+
+@login_required
+@group_required('Administrador')
+def toExcel(request,data):
+
+	fecha=str(data)
+	total=0
+	
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="Arqueo_'+fecha+'.xlsx"'
+	wb = xlwt.Workbook(encoding='utf-8')
+	ws = wb.add_sheet('Reporte Arqueo') # this will make a sheet named Users Data
+	#Encabezados
+	row_num=0
+	font_style=xlwt.XFStyle()
+	font_style.font.bold=True
+	
+	columns=['Matricula','Fecha Ingreso','Fecha Salida','Pago Bs.','Fecha de Pago']
+	for col_num in range(len(columns)):
+		ws.write(row_num,col_num,columns[col_num],font_style)
+
+	font_style_data=xlwt.XFStyle()
+	
+	data=[]  #array for tuples
+
+	#p=Pagos.objects.filter(fecha__date=fecha).values_list('matricula','pago','fecha')
+	p=Pagos.objects.filter(fecha__date=fecha)
+	row_num+=1
+	for i in p:
+		data.append((str(i.matricula.matricula),str(i.matricula.fecha_ingreso.strftime("%Y-%m-%d %H:%M:%S")),str(i.matricula.fecha_salida.strftime("%Y-%m-%d %H:%M:%S")),str(i.pago),str(i.fecha.strftime("%Y-%m-%d %H:%M:%S"))))
+
+	for row in data:
+		total=total+int(row[3])
+		row_num+=1
+		for col_ in range(len(row)):
+			ws.write(row_num,col_,row[col_],font_style_data)
+		
+
+
+	row_num+=1
+	row_num+=1
+	total_data=["","",'Total Bs.',str(total)]
+	for i in range(len(total_data)):
+		ws.write(row_num,i,total_data[i],font_style)
+	
+
+
+	wb.save(response)
+	return response
+    
+def toExcel_report(request,data):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="users.xlsx"'
+	wb = xlwt.Workbook(encoding='utf-8')
+	ws = wb.add_sheet('Users Data') # this will make a sheet named Users Data
+	#Encabezados
+	row_num=0
+	font_style=xlwt.XFStyle()
+	font_style.font.bold=True
+	columns=['Matricula','Fecha Ingreso','Fecha Salida','Pago','Fecha de Pago']
+	for col_num in range(len(columns)):
+		ws.write(row_num,col_num,columns[col_num],font_style)
+
+	font_style_data=xlwt.XFStyle()
+	#    	p=Pagos.objects.filter(fecha__date=datetime.datetime.now().date())
+	wb.save(response)
+	return response
 
 ##########fin admin ######
 
@@ -248,12 +357,8 @@ def ingresos(request):  #ARQUEO para ADMIN
 			'fecha':fecha,
 			'total':total
 		})
-
 		html=t.render(cont)
-
 		return HttpResponse(html)
-
-
 
 def imprimir_ticket(x,y):
 	c=0
@@ -268,7 +373,6 @@ def imprimir_ticket(x,y):
 				print "non se puede conectar a Impresora..."
 				print "Saliendo sin Imprimir!!!!"
 				break
-
 	except:
 		print "Error con impresora!!!"
 	try:
@@ -324,7 +428,7 @@ def total_pagar(request):
 			total_pagar=17
 		elif (total_seconds>=14400 and total_seconds<=16200):
 			total_pagar=18.50
-		elif (total_seconds>=16200 and total_seconds<=1800):
+		elif (total_seconds>=16200 and total_seconds<=18000):
 			total_pagar=20
 		
 		else:
@@ -335,11 +439,14 @@ def total_pagar(request):
 
 			total_pagar=20+horas_pagar
 
-		minutos=round(total_seconds/60)
+
+		
+		minutos_totales=round(total_seconds/60)
+		tiempo=divmod(minutos_totales,60)
 
 		#total_horas=total_seconds/3600
 		#total_pagar=round(total_horas*8,2)
-		r.update({'pagar':total_pagar,'min':minutos})
+		r.update({'pagar':total_pagar,'horas':tiempo[0],'min':tiempo[1]})
 
 		resp_j=json.dumps(r)
 
@@ -375,7 +482,7 @@ def pagar_(x):
 		total_pagar=17
 	elif (total_seconds>=14400 and total_seconds<=16200):
 		total_pagar=18.50
-	elif (total_seconds>=16200 and total_seconds<=1800):
+	elif (total_seconds>=16200 and total_seconds<=18000):
 		total_pagar=20
 
 ##si es mayor a 18000() 5 horas
