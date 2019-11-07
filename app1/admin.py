@@ -14,4 +14,8 @@ class AdminPagos(admin.ModelAdmin):
 
 admin.site.register(Pagos,AdminPagos)
 
+class AdminContrato(admin.ModelAdmin):
+	list_display=['matricula','inicio','final','coste']
+admin.site.register(Contrato,AdminContrato)
+
 # Register your models here.

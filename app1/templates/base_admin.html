@@ -32,24 +32,22 @@
 	
 	a{
 		text-decoration: none;
-		
-		font-size: 15px;
+		color: #fff;
 		
 
 	}
 	a:hover{
 		text-decoration: none;
-		
-		
+		color:#fff;
 	}
 
-	#ul_id{
+	ul{
 			list-style-type: none;
 	padding: 0;
 
 
 	}
-	#ul_id li{
+	ul li{
 		
 			font-size: 23px;
 	font-family: sans-serif;
@@ -65,8 +63,24 @@
 	cursor: pointer;
 
 	}
+	ul li a {
+	color: white;
+	mix-blend-mode: difference;
+	}
+	ul li::before {
+	content: '';
+	position: absolute;
+	width: 2.2em;
+	height: inherit;
+	background-color: #ddd;
+	border-radius: 35%;
+	top: 0;
+	left: -1.4em;
+	transition: 0.4s ease-out;
+	}
 
-
+ ul li:hover::before {
+	transform: scale(7);
 
 }
 	#usuario{
@@ -95,22 +109,18 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-lg-2">
-				<small id="usuario">User:{{user}}</small>
+				<small id="usuario">User:</small>
 			</div>
 		</div>
-
-
 		<div class="row">
 			<div class="col-lg-2">
-				<ul id="ul_id">
+				<ul>
 					<li><a href="{% url 'administrador'%}">Inicio</a></li>
-					<li><a href="{% url 'arqueo_admin'%}">Arqueo</a></li>
-					<li><a href="{% url 'contrato'%}">Nuevo Contrato</a></li>
-					<li><a href="{% url 'contratos_all'%}">Contratos</a></li>
-					
-					<li><a href="{% url 'mod_ingreso'%}">Modificar Ingreso</a></li>
-					<li><a href="{% url 'mod_salida'%}">Modificar Salida</a></li>
-					
+					<li><a href="">Reportes</a></li>
+					<li><a href="{% url 'ingresos'%}">Ingresos</a></li>
+					<li><a href="">Matriculas</a></li>
+					<li><a href="">Usuarios</a></li>
+					<li><a href="">Consultas</a></li>
 				</ul>
 
 				

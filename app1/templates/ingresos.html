@@ -1,0 +1,85 @@
+{% extends 'base_admin.html'%}
+{% load static %}
+
+{% block title %}Ingresos{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+<style>
+	#fi, #fs{
+		width: 110px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="row">
+				<div class="col-lg-12"><h4>Seleccione Fecha</h4></div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<label for="fi">Desde:</label>
+					<input type="text" name="" id="fi">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<label for="fs">Hasta:</label>
+					<input type="text" name="" id="fs">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<input type="button" name="" value="Buscar">
+				</div>		
+			</div>
+		</div>
+		
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-lg-2"><h5>Matrícula</h5></div>
+		<div class="col-lg-2"><h5>Pago Bs.</h5></div>
+		<div class="col-lg-2"><h5>Fecha</h5></div>
+	</div>
+	{% for i in p %}
+		<div class="row">
+			<div class="col-lg-2">{{i.matricula}}</div>
+			<div class="col-lg-2">{{i.pago}}</div>
+			<div class="col-lg-2">{{i.fecha}}</div>
+		</div>
+	
+	{% endfor %}
+
+	
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+	$( function() {
+    	$( "#fi" ).datepicker();
+    	$( "#fi" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+  	});
+  	$( function() {
+	   	$( "#fs" ).datepicker();
+	   	$( "#fs" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	});
+
+})
+
+</script>
+
+{% endblock %}

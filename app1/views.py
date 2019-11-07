@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User, Group
 
-from app1.forms import Ingreso, Buscar
+from app1.forms import Ingreso, Buscar, Id_matricula
 from app1.models import *
 import json
 import datetime
@@ -130,7 +130,9 @@ def salida(request):
 				print "no se puede realizar registro la Matricula Ya salio!!!"
 				r.update({'status':"false"})
 			else: ## si no tiene fecha de salida podemos realizar salida
-				park=Parking.objects.get(matricula=matricula)
+				parkpark=Parking.objects.filter(matricula=matricula,abierto=True)
+				park=parkpark[0]
+
 				t=datetime.datetime.now()
 				park.fecha_salida=t
 				park.abierto=False
@@ -253,7 +255,7 @@ def arqueo_admin(request):
 		fb=Buscar()
 
 		for i in p:
-			total=total+ i.pago
+			total=total+ int(i.pago)
 
 		cont=({
 			'p':p,
@@ -332,6 +334,142 @@ def toExcel_report(request,data):
 	wb.save(response)
 	return response
 
+@login_required
+@group_required('Administrador')
+def mod_ingreso(request):
+	user=request.user
+	if request.method=='POST':
+		f=Id_matricula(request.POST)
+		if f.is_valid():
+			id_mat=f.cleaned_data.get("id_mat")
+			p=Parking.objects.get(id=id_mat)
+			p.delete()
+			print "MAt Borrada!!!"
+			return redirect('mod_ingreso')
+		else:
+			print "Error"
+			return HttpResponse("Error al borrar MAT")
+	else:
+		data=[]
+		p=Parking.objects.filter(fecha_ingreso__date=datetime.datetime.now().date(),abierto=True)
+
+		for i in p:
+			f=Id_matricula(initial={'id_mat':i.id})
+			data.append({'p':i,'f':f})
+		cont=({
+			'data':data
+			})
+		return render(request,'Admin/mod_ingreso.html',cont)
+
+@login_required
+@group_required('Administrador')
+def mod_salida(request):
+	if request.method=='POST':
+		pass
+	else:
+		p=Parking.objects.filter(fecha_salida__date=datetime.datetime.now().date())
+		f=ParkingForm()
+		cont=({
+			'p':p,
+			})
+		return render(request,'Admin/mod_salida.html',cont)
+
+def mod_salida_id(request,mat):
+	user=request.user
+	if request.method=='POST':
+
+		f=ParkingForm(request.POST)
+		if f.is_valid():
+			a= f.cleaned_data.get('matricula')
+			b= f.cleaned_data.get('fecha_salida')
+			c= f.cleaned_data.get('abierto')
+
+			try:
+				p=Parking.objects.filter(matricula=str(a)).last()
+				p.fecha_salida=None
+				p.abierto=c
+				p.save()
+
+			except:
+				print "Error al modificar Reingreso"
+
+			try:
+				pa=Pagos.objects.get(matricula=Parking.objects.get(id=p.id))
+				pa.delete()
+				print "Pago Borrado"
+			except:
+				print "Error al agarrar pago"
+
+
+
+
+
+		else:
+			pass
+
+
+
+		return redirect('modificado')
+		
+	else:
+
+		p=Parking.objects.get(id=int(mat))
+		if p.fecha_salida:
+			f=ParkingForm({'matricula':p.matricula,'fecha_salida':p.fecha_salida,'abierto':p.abierto})
+			cont=({
+				'f':f,
+				'id':p.id
+				})
+			return render(request,'Admin/mod_salida_id.html',cont)
+		else:
+			print "NICE TRY :)"
+			return redirect('mod_salida')
+def contrato(request):
+	user=request.user
+	if request.method=='POST':
+		f=ContratoForm(request.POST)
+		if f.is_valid():
+			print "Form valid"
+			#form tmp for editing data before saving it
+			tmpf=f.save(commit=False)
+			tmpf.user=str(user.username)
+			tmpf.save()
+
+			return redirect('contrato')
+		else:
+			print "bad form"
+			return redirect('contrato')
+
+		
+	else:
+		f=ContratoForm()
+		cont=({
+			'f':f
+			})
+		return render(request,'Admin/contrato.html',cont)
+
+def contratos_all(request):
+	if request.method=='POST':
+		pass
+	else:
+		t='Admin/contratos_all.html'
+		c=Contrato.objects.all()
+		cont=({
+			'c':c
+			})
+		return render(request,t,cont)
+
+#oagina solo de mensaje de modificacion
+def modificado(request):
+	if request.method=='POST':
+		pass
+	else:
+		t=get_template('Admin/modificado.html')
+		cont=({})
+		html=t.render(cont)
+		return HttpResponse(html)
+
+
 ##########fin admin ######
 
 def ingresos(request):  #ARQUEO para ADMIN
@@ -399,7 +537,9 @@ def total_pagar(request):
 		x=data_d[0]['matricula'].upper()
 
 		print x
-		p=Parking.objects.get(matricula=x)
+		pp=Parking.objects.filter(matricula=x,abierto=True)
+		p=pp[0]
+
 		print p
 		inicio=p.fecha_ingreso
 		salida=p.fecha_salida
@@ -453,7 +593,8 @@ def total_pagar(request):
 		return HttpResponse (resp_j,content_type='application/json')
 
 def pagar_(x):
-	p=Parking.objects.get(matricula=x)
+	pp=Parking.objects.filter(matricula=x).last()
+	p=pp
 	##print p
 	inicio=p.fecha_ingreso
 	salida=p.fecha_salida

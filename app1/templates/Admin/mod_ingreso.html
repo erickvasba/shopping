@@ -1,0 +1,56 @@
+{% extends 'Admin/base_admin.html'%}
+
+{% load static %}
+
+{% block title %}Modificar In{% endblock %}
+
+{% block estilos %}
+<style type="text/css">
+	#header{
+		background-color: rgba(9,12,122,0.4);;
+		color: #fff;
+		font-weight: bold;
+	}
+	#data:nth-child(even){
+		background-color: rgba(190,190,190,0.4);
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<h1>Modificación Ingreso </h1>
+<br>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-10">
+			<div class="row" id="header">
+				<div class="col-lg-3">Matricula</div>
+				<div class="col-lg-6">Ingreso</div>
+				<div class="col-lg-3">Acción</div>
+			</div>
+			{% for i in data%}
+				<div class="row" id="data">
+					<div class="col-lg-3"><h5>{{i.p.matricula}}</h5></div>
+					<div class="col-lg-6">{{i.p.fecha_ingreso}}</div>
+					<form action="{% url 'mod_ingreso'%}" method="POST">
+						{% csrf_token %}
+						<div class="col-lg-3">{{i.f}}</div>
+						<input type="submit" name="" value="Eliminar">
+					</form>
+					
+
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	
+
+</div>
+
+
+
+
+{% endblock %}

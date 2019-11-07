@@ -4,6 +4,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.contrib.auth.models import User, Group
 
+from django.forms import ModelForm
+
 
 class Parking(models.Model):
 	matricula=models.CharField(max_length=10,blank=False)
@@ -17,6 +19,12 @@ class Parking(models.Model):
 
 	def __str__(self):
 		return self.matricula
+
+class ParkingForm(ModelForm):
+	class Meta:
+		model=Parking
+		exclude=['fecha_ingreso','user','fecha']
+
 
 class Vitacora(models.Model):
 	user=models.CharField(max_length=10)
@@ -38,8 +46,15 @@ class Pagos(models.Model):
 class Contrato(models.Model):
 
 	matricula=models.CharField(max_length=10,blank=False)
-	dueno=models.CharField(max_length=50)
-	inicio=models.DateTimeField(null=False)
-	final=models.DateTimeField(null=False)
+	inicio=models.DateField(null=False)
+	final=models.DateField(null=False)
+	coste=models.IntegerField(default=0)
 	cliente=models.CharField(max_length=70)
 	obs=models.TextField(max_length=200)
+	fecha=models.DateField(auto_now=True)
+	user=models.CharField(max_length=20,default="")
+
+class ContratoForm(ModelForm):
+	class Meta:
+		model=Contrato
+		exclude=['user']

@@ -9,5 +9,8 @@ class Ingreso(forms.Form):
 class Buscar(forms.Form):
 	fecha_buscar=forms.CharField(max_length=10)
 
+class Id_matricula(forms.Form):
+	id_mat=forms.IntegerField(widget=forms.HiddenInput())
+
 
 

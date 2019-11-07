@@ -1,0 +1,95 @@
+{% extends 'base_admin.html'%}
+
+{% block title %}Admin{% endblock %}
+
+{% block estilos %}
+<style type="text/css">
+	#autos{
+		background-color: rgba(240,240,240,1);
+		margin-right: 10px;
+		margin-bottom: 5px;
+		border-radius: 5px 5px 5px;
+		border: 2px solid #53a;
+		color:#53a;
+		font-weight: bold;
+		font-size: 22px;
+		text-shadow: 1px 1px 3px #eee;
+		width: 170px;
+		text-align: center;
+
+	}
+	#fecha{
+		font-size: 10px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<h2>Vehículos en Parking</h2>
+		</div>
+	</div>
+	<div class="row">
+		{% for i in p %}
+			<div class="col-lg-2" id="autos">
+				<div class="row">
+					<div class="col-lg-12" id="auto_mat">
+							<span>{{i}}</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" id="fecha">
+							Ingreso: {{i.fecha_ingreso.date}} | {{i.fecha_ingreso.time}}
+					</div>	
+				</div>
+			</div>
+		{% endfor %}
+		
+	</div>
+</div>
+<hr>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-2"><h4>Matrícula</h4></div>
+		<div class="col-lg-2"><h4>F. Ingreso</h4></div>
+		<div class="col-lg-2"><h4>F. Salida</h4></div>
+		<div class="col-lg-2"><h4>Pagar Bs.</h4></div>
+		<div class="col-lg-4"><h4>Estado</h4></div>
+	</div>
+	{% for i in mat %}
+	<hr>
+	<div class="row">
+		<div class="col-lg-2"><h5>{{i.mat.matricula}}</h5></div>
+		<div class="col-lg-2">{{i.mat.fecha_ingreso}}</div>
+
+		
+		{% if i.mat.fecha_salida %}
+			<div class="col-lg-2">{{i.mat.fecha_salida}}</div>
+		{% else %}
+			<div class="col-lg-2">En Parkeo </div>
+		{% endif %}
+
+		<div class="col-lg-2 text-center">{{i.pagar}}</div>
+		{% if i.mat.abierto %}
+			<div class="col-lg-4">Pendiente</div>
+		{% else %}
+			<div class="col-lg-4">Finalizado</div>
+		{% endif %}
+
+	</div>
+	
+	{% endfor %}
+	<hr>
+	<div class="row">
+		<div class="col-lg-12">
+			<h4>Total Ingreso día: Bs.  {{total}}</h4>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

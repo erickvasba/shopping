@@ -1,0 +1,59 @@
+{% extends 'Admin/base_admin.html'%}
+
+
+{% block title%}Modificar{% endblock%}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<h2>Modificar Salida</h2>
+	</div>
+	<div class="row">
+		<div class="col-lg-8">
+			<form action="{{id}}" method="POST">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-lg-2">
+						<label for ='id_matricula'>Matricula:</label>		
+					</div>
+					<div class="col-lg-5">
+						{{f.matricula}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-2">
+						<label for ='id_fecha_salida'>Salida </label>		
+					</div>
+					<div class="col-lg-5">
+						{{f.fecha_salida}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-2">
+						<label for ='id_abierto'>Reingresar</label>		
+					</div>
+					<div class="col-lg-5">
+						{{f.abierto}}
+					</div>
+				</div>
+				
+
+				<input type="submit" name="" value="Modificar">
+			</form>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$("#id_matricula").attr('readonly','readonly');
+
+	})
+
+</script>
+{% endblock %}

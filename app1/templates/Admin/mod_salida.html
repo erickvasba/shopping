@@ -1,0 +1,40 @@
+{% extends 'Admin/base_admin.html'%}
+
+{% load static %}
+
+{% block title %}Modificar Out{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<h2>Modificar Salidas</h2>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	{% for i in p %}
+	<div class="row">
+		<div class="col-lg-2">{{i.matricula}}</div>
+		<div class="col-lg-2">{{i.fecha_ingreso}}</div>
+		<div class="col-lg-2">{{i.fecha_salida}}</div>
+		<div class="col-lg-2"><a href="{{i.id}}">Modificar</a></div>
+	</div>
+	{% endfor %}
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<form>
+				
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}

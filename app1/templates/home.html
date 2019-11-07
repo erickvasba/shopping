@@ -1,20 +1,156 @@
-{% extends 'Operador/base.html'%}
+{% extends 'base.html'%}
 {% load static%}
 
 {% block title %}Shopping-Norte{% endblock %}
-
 {% block estilos %}
+<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Marmelad|Monoton" rel="stylesheet"> 
+
 <style type="text/css">
-	#data{
-		font-size: 12px;
+	body{
+		background-color: rgba(235,237,159,0.4);
 	}
 
-	#data:nth-child(even){
-		background-color: rgba(20,130,12,0.2);
+	input{
+		border-radius: 4px 4px;
+		font-size: 30px;
+		color: rgba(10,10,200,0.9);
+		width: 220px;
+		height: 50px;
+		text-align: center;
+		font-family: 'Marmelad', sans-serif;
+		margin-bottom: 10px;
+	}
+
+	#boton{
+		border-radius: 50px 50px;
+		height: 90px;
+	}
+	label{
+		color: green;
+	}
+	#btn{
+		
+    width: 115px;
+    height: 35px;
+    
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
 
 	}
+	#btn_ingreso{
+		background: rgb(42,184,31);
+		position: relative;
+		border-radius: 5px;
+    	color: white;
+    	font-weight: bold;
+    	font-size: 24px;
+    	width: 120px;
+    	height: 40px;
+	}
+	#btn_pagar{
+		background: rgb(184,84,31);
+		position: relative;
+		border-radius: 5px;
+    	color: white;
+    	font-weight: bold;
+    	font-size: 24px;
+    	width: 120px;
+    	height: 40px;
+	}
+	#btn_buscar{
+		background: rgb(18,14,101);
+		color: #fff;
+		margin-top: 8px;
+		font-size: 22px;
+		font-weight: bold;
+		border-radius: 5px;
+		width: 140px;
+
+	}
+
+
+	#titulo{
+		color: rgb(220,200,10);
+		background-color: rgba(20,20,20,1);
+		font-family: 'Monoton', cursive;
+		border-radius: 8px 8px;
+		text-align: center;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-top: 10px;
+		text-shadow: 2px 1px 10px #fff;
+		box-shadow: 2px 2px 4px #111;
+		border-bottom: solid 1px rgb(220,200,10);
+		border-left: solid 1px rgb(220,200,10);
+		border-right: solid 1px rgb(220,200,10);
+
+	}
+	#bs{
+		vertical-align: text-bottom;
+	}
+	#boton{
+		align-content: center;
+	}
+	#matricula{
+		text-transform: uppercase;
+	}
+	#matricula1{
+		border-bottom: 2px solid green;
+		background-color: rgba(200,200,200,0.4);
+		padding-top: 10px;
+		color: green;
+		font-weight: bold;
+		text-shadow: 1px 2px 2px #666;
+	}
+	#usuario{
+		height: 10px;
+		margin-top: -8px;
+		margin-left: 20px;
+		margin-bottom: 10px;
+		font-size: 10px;
+		color: rgba(10,10,10,0.5);
+	}
+	#autos{
+		background-color: rgba(255,255,250,1);
+		margin-right: 10px;
+		margin-bottom: 5px;
+		border-radius: 5px 5px 5px;
+		border: 2px solid #53a;
+		color:#53a;
+		font-weight: bold;
+		font-size: 22px;
+		text-shadow: 1px 1px 1px #999;
+		width: 170px;
+
+	}
+	#fecha{
+		font-size: 10px;
+	}
+	a{
+		text-decoration: none;
+		color:#eee;
+	}
+	a:hover{
+		text-decoration: none;
+		color:#eee;
+	}
+	span{
+		cursor:grab;
+	}
+	#xxx{
+		background-color: rgb(50,140,50);
+		border: 2px solid #eee;
+		border-radius: 5px 5px 5px;
+		color:#eee;
+		text-shadow: 1px 2px 2px #222;
+		font-weight: bold;
+		box-shadow: 2px 4px 4px #444;
+	}
+
 </style>
-
 {% endblock %}
 
 {% block content %}
@@ -71,41 +207,30 @@
 					<div class="col-lg-1"></div>
 					<div class="col-lg-10" id="xxx">
 						<div class="row">
-							<div class="col-lg-12"><div>Total a Pagar</div></div>
-						</div>
-						<div class="row">
-							<div class="col-md-3"></div>
-							<div class="col-md-2 text-center" id="bs">
-								<small><h1><small>Bs. </small></h1></small>
-							</div>
-							<div class="col-md-5"><div id="pagar"></div></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12"><div id="min"></div></div>
-						</div>
+					<div class="col-lg-12"><div>Total a Pagar</div></div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 text-center" id="bs">
+						<small><h1><small>Bs. </small></h1></small>
+					</div>
+					<div class="col-md-5"><div id="pagar"></div></div>
+				</div>
+						
 					</div>
 					<div class="col-lg-1"></div>
 				</div>
-				<br>
-				<div class="row">
-					<div class="col-lg-12">
-						
-					</div>
-				</div>
+
+				
+
 			</div>
+
 		</div>
 		
 		<div class="col-md-8" id="mats_container">
 			{% if parking %}
 				<div class="row" id="matricula1">
-					<div class="col-lg-9">
+					<div class="col-lg-12">
 						<h3>Vehículos en Parking</h3>
-					</div>
-					<div class="col-lg-1">
-						<a href="{% url 'salidas'%}" style="color:blue">Salidas</a>
-					</div>
-					<div class="col-lg-1">
-						<a href="{% url 'arqueo'%}" style="color:blue">Arqueo</a>
 					</div>
 				</div>
 				<br>
@@ -117,31 +242,20 @@
 								<span>{{i}}</span>
 							</div>
 						</div>
-						<div class="row text-center">
-							<div class="col-lg-12" id="fecha">
-									{{i.fecha_ingreso.date|date:'d-m-Y'}} | {{i.fecha_ingreso.time}}
-							</div>
-						</div>
 						<div class="row">
-							<div class="col-lg-12">
-								
-							</div>
+							<div class="col-lg-12" id="fecha">
+									Ingreso: {{i.fecha_ingreso.date}} | {{i.fecha_ingreso.time}}
+							</div>	
 						</div>
 					</div>
 				{% endfor %}
 			{% else %}
 				<div class="row">
 					<div class="col-lg-12">
-						<h5>No existen Vehículos en Parqueo</h5>
+						<h5>No existen Vehículos Registrados</h5>
 					</div>
 				</div>
 			{% endif %}
-				
-			</div>
-
-
-			<div class="row">
-
 				
 			</div>
 
@@ -150,9 +264,6 @@
 	
 
 </div>
-<br>
-
-
 
 {% endblock %}
 
@@ -178,7 +289,6 @@ $(document).ready(function(){
 		//limpiamos 
 		$("#lab").hide();
 		$("#pagar").html("");
-		$("#min").html("");
 
 		$.ajax({
             type: "POST",
@@ -192,8 +302,7 @@ $(document).ready(function(){
                 $("#lab").show();
                 $("#xxx").show();
                 
-                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>");
-                $("#min").append("<h1>"+data_enviar.horas+"hrs. - "+data_enviar.min+"min.</h1>");
+                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>")
 
 
 
@@ -252,9 +361,8 @@ $(document).ready(function(){
 	});
 
 
-	$("#matricula").click(function(){
-		$(this).val("");
-		$("#xxx").hide();
+	$("#boton_pagar").click(function(){
+
 	});
 
 //evento para SALIDA de MATRICULA
@@ -294,6 +402,8 @@ $(document).ready(function(){
             },
         });
 	});
+
+
 
 /////////////////////////////////FIN SALIDA
 	    // CSRF code
