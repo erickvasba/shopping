@@ -13,6 +13,19 @@
 		background-color: rgba(20,130,12,0.2);
 
 	}
+	.button{
+		background: rgb(10,10,131);
+		
+		border-radius: 5px;
+    	color: #FFF;
+    	font-weight: bold;
+    	font-size: 14px;
+    	padding: 4px;
+    	margin-bottom:6px;
+    	margin-top: 6px;
+    	box-shadow: #555 2px 3px 2px;
+
+	}
 </style>
 
 {% endblock %}
@@ -44,15 +57,27 @@
 				<div class="col-lg-10" id="matricula1">
 					<h3>Matrícula:</h3>
 				</div>
-				<div class="col-lg-1"></div>
-			</div><br>
-			
-			<!-- <input id="num" type="tel" name="" placeholder="1234" maxlength="4">-->
-			<div class="row">
-				<div class="col-lg-12">
-					<input id="matricula" type="text" name="" placeholder="--- ---" maxlength="9">		
+				<div class="col-lg-1">
+
 				</div>
 			</div>
+			<div class="row" id="busqueda">
+
+
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<input id="matricula" type="text" name="" placeholder="--- ---" maxlength="9">
+				</div>
+			</div>
+			<!-- Modificado para Motocicleta 21 Feb 2020-->
+			<div class="row">
+				<div class="col-lg-12">
+					<input type="checkbox" name="moto" id="moto"><label>Motocicleta</label>
+				</div>
+			</div>
+			<!-- -->
 			<div class="row">
 				<div class="col-lg-1"></div>
 				<div class="col-lg-5">
@@ -98,54 +123,103 @@
 		<div class="col-md-8" id="mats_container">
 			{% if parking %}
 				<div class="row" id="matricula1">
-					<div class="col-lg-9">
-						<h3>Vehículos en Parking</h3>
+					<div class="col-lg-12">
+						<h3>Hay {{count}} vehículos en Parqueo</h3>
 					</div>
-					<div class="col-lg-1">
-						<a href="{% url 'salidas'%}" style="color:blue">Salidas</a>
+					
+				</div>
+				<div class="row">
+					<div class="col-6">
+						
 					</div>
-					<div class="col-lg-1">
-						<a href="{% url 'arqueo'%}" style="color:blue">Arqueo</a>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'contrato'%}">Contratos</a>
+					</div>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'salidas'%}" >Salidas</a>
+					</div>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'arqueo'%}" >Arqueo</a>
 					</div>
 				</div>
+
 				<br>
 				<div class="row">
-				{% for i in parking %}
-					<div class="col-lg-2" id="autos">
-						<div class="row">
-							<div class="col-lg-12" id="auto_mat">
-								<span>{{i}}</span>
+					{% for i in parking %}
+						<div class="col-lg-2" id="autos">
+							<div class="row">
+								<div class="col-lg-12" id="auto_ma">
+									<span>{{i.matricula}}</span>
+								</div>
+							</div>
+							<div class="row text-center">
+								<div class="col-lg-12" id="fecha">
+										{{i.fecha_ingreso.date|date:'d-m-Y'}} | {{i.fecha_ingreso.time}}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									
+								</div>
 							</div>
 						</div>
-						<div class="row text-center">
-							<div class="col-lg-12" id="fecha">
-									{{i.fecha_ingreso.date|date:'d-m-Y'}} | {{i.fecha_ingreso.time}}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-12">
-								
-							</div>
-						</div>
-					</div>
-				{% endfor %}
+					{% endfor %}
+				</div>
 			{% else %}
 				<div class="row">
 					<div class="col-lg-12">
 						<h5>No existen Vehículos en Parqueo</h5>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-6">
+						
+					</div>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'contrato'%}">Contratos</a>
+					</div>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'salidas'%}" >Salidas</a>
+					</div>
+					<div class="col-lg-2">
+						<a class="button" href="{% url 'arqueo'%}" >Arqueo</a>
+					</div>
+				</div>
 			{% endif %}
-				
+<hr>
+			<div class="row text-center">
+				<div class="col-lg-12"><h5>Contratos</h5></div>
 			</div>
-
-
 			<div class="row">
+				{% for i in c %}
+					<div class="col-lg-2" id="autos_c">
+						<div class="row">
+							<div class="col-lg-12" id="auto_ma">
+								<span>{{i.matricula}}</span>
+							</div>
+						</div>
 
-				
+						<div class="row text-center">
+							<div class="col-lg-12" id="fecha">
+								Desde: {{i.inicio|date:'d-m-Y'}} Hasta: {{i.final|date:'d-m-Y'}}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12"></div>
+						</div>
+					</div>
+				{% endfor %}
 			</div>
-
+				
+				
 		</div>
+
+
+<!-- Parking Contrato-->
+		
+
+
 	</div>
 	
 
@@ -161,8 +235,20 @@
 	$("#matricula").val("");
 	$("#lab").hide();
 	$("#xxx").hide();
-	
+
 $(document).ready(function(){
+
+	var moto=false;
+
+	//modificado para motocicletas 21 Feb 20202
+	$("#moto").click(function(){
+		var c=$(this).is(':checked');
+
+		//alert(c);
+		moto=c;
+
+	});
+	//
 
 //evento para hacer click en id=auto_mat
 	$("[id^='auto_ma']").click(function(){
@@ -220,9 +306,11 @@ $(document).ready(function(){
 
 		mat={'matricula':m};
 		user={'user':u};
+		moto={'moto':moto};
 
 		jsonobj.push(mat);
 		jsonobj.push(user);
+		jsonobj.push(moto);
 
         $.ajax({
             type: "POST",
@@ -242,6 +330,7 @@ $(document).ready(function(){
                 	alert("No se puede Ingresar la Matricula");
                 	$("#matricula").val("");
                 	$("#matricula1").html("");
+                	$("#xxx").hide();
                 }
                 //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
             },
@@ -251,11 +340,97 @@ $(document).ready(function(){
 
 	});
 
-
 	$("#matricula").click(function(){
 		$(this).val("");
 		$("#xxx").hide();
+		$("#busqueda").html("");
 	});
+
+
+
+	//PARA BUSQUEDAS
+	$("#matricula").keyup(function(){
+		$("#busqueda").html("");
+		var jsonobj=[];
+		var mat={};
+		var matricula=$(this).val();	
+		var i=0;
+		var aux_mat;
+
+		mat={'matricula':matricula};
+
+		jsonobj.push(mat);
+
+
+		if(matricula==""){
+			$("#busqueda").html("");
+		}
+		else{
+			$.ajax({
+	            type: "POST",
+	            url: "{% url 'busqueda' %}",
+	            dataType: "json",
+	            
+	            data:{data:JSON.stringify(jsonobj)},
+	            success: function(data_enviar, status, jqXHR) {
+	                //console.log("Status:--->"+JSON.stringify(data_enviar));
+	                
+	                
+	                for ( i=0;i<data_enviar.length;i++){
+	                	aux_mat=String(data_enviar[i]['mat']);
+	                	//console.log(data_enviar[i]['mat']);
+	                	$("#busqueda").append("<div class='col-lg-3' id='autos_posible'><div class='row'><div class='col-lg-12' id='auto_max' value='"+aux_mat+"'><span>"+aux_mat+"</span></div></div></div>"
+	                	);
+	                }
+	                
+	                //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
+	            },
+	        });
+		}
+	});
+
+	///DElegeamos la funcion CLICK a nuevos elementos DOM
+	$("#busqueda").on('click','[id^="auto_ma"]',function(){
+		var m=$(this).attr('value');
+		//mat=mat.substring(mat.length-4,mat.length-3);
+		mat=m.replace('-','');
+		//alert(mat);
+		$("#matricula").val(mat);
+		jsonobj=[]
+		jsonobj.push({'matricula':m});
+
+
+		//limpiamos 
+		$("#lab").hide();
+		$("#pagar").html("");
+		$("#min").html("");
+
+		$.ajax({
+            type: "POST",
+            url: "{% url 'total_pagar' %}",
+            dataType: "json",
+            //data: {data:JSON.stringify({"data":[{"cod":123,"can":222}],"data2":[{"cod2":999,"can2":101010},{"cod22":"erick","can22":"ricardo"}]})},
+            data:{data:JSON.stringify(jsonobj)},
+            success: function(data_enviar, status, jqXHR) {
+                console.log("Status:--->"+JSON.stringify(data_enviar));
+
+                $("#lab").show();
+                $("#xxx").show();
+                
+                $("#pagar").append("<h1>"+data_enviar.pagar+"</h1>");
+                $("#min").append("<h1>"+data_enviar.horas+"hrs. - "+data_enviar.min+"min.</h1>");
+
+
+
+                //window.location.replace("{%url 'home'%}");     //Para redireccionar a otra URL
+            },
+        });
+
+	});
+	
+
+	
+	
 
 //evento para SALIDA de MATRICULA
 	$("#btn_pagar").click(function(){

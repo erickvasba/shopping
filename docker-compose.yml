@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  django_app:
+    container_name: shopping
+    image: parking-app:2.4
+    command: python manage.py runserver 0.0.0.0:8081
+    privileged: yes
+    # volumes:
+    #   - /dev/usb:dev/usb
+    #attach device to the container
+    devices:
+      - "/dev/usb/lp0:/dev/usb/lp0"
+    ports:
+      - "8081:8081"
+    networks:
+      - shopping
+  
+networks:
+  shopping:
+    name: shopping

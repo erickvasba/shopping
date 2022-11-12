@@ -26,6 +26,7 @@ urlpatterns=[
 	url(r'^arqueo/',views.arqueo, name='arqueo'),
 	url(r'^salidas/',views.salidas, name='salidas'),
 	url(r'^ingreso/',views.ingreso, name='ingreso'),
+	url(r'^busqueda/',views.busqueda, name='busqueda'),
 	url(r'^salida/',views.salida, name='salida'),
 	url(r'^total_pagar/',views.total_pagar, name='total_pagar'),
 

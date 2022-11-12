@@ -5,11 +5,16 @@
 
 {% block estilos %}
 <style type="text/css">
-		#table_header{
+
+	#table_head{
 		background-color: rgba(23,30,123,0.7);
 		padding-top: 5px;
 		color:#eee;
 		text-align: center;
+
+	}
+	#table_head div {
+		border-left: solid 1px #ccc;
 
 	}
 	#data{
@@ -18,14 +23,20 @@
 	}
 	#data:nth-child(even){
 		background-color: rgba(123,231,123,0.2);
+		
 	}
-		a{
+	#data div{
+		border-left: solid 1px #ccc;
+
+	}
+	a{
 		color: blue;
 	}
 	a:hover{
 		color:blue;
 		font-weight: bold;
 	}
+	
 </style>
 
 {% endblock %}
@@ -51,26 +62,30 @@
 	<div class="row text-center" id="matricula1">
 		<div class="col-lg-1"></div>
 		<div class="col-lg-10">
-			<h3>Ultimas Salidas {{fecha}}</h3>
+			<h3>Salidas {{fecha}}</h3>
 		</div>
 		<div class="col-lg-1"><a href="{% url 'home'%}">Atras</a></div>
 	</div>
 <br>
 	<div class="row" >
-		<div class="col-lg-3"></div>
-		<div class="col-lg-6">
-			<div class="row" id="table_header">
-				<div class="col-lg-3"><h5>Matrícula</h5></div>
-				<div class="col-lg-6"><h5>Fecha Salida</h5></div>
+		<div class="col-lg-2"></div>
+		<div class="col-lg-8">
+			<div class="row" id="table_head">
+				<div class="col-lg-2"><h5>Id</h5></div>
+				<div class="col-lg-2"><h5>Matrícula</h5></div>
+				<div class="col-lg-4"><h5>Fecha Salida</h5></div>
+				<div class="col-lg-3"><h5>Realizado por:</h5></div>
 			</div>
 			{% for i in salidas %}
 				<div class="row" id="data">
-					<div class="col-lg-3">{{i.matricula}}</div>
-					<div class="col-lg-6">{{i.fecha}}</div>
+					<div class="col-lg-2">{{i.id}}</div>
+					<div class="col-lg-2">{{i.matricula}}</div>
+					<div class="col-lg-4">{{i.fecha}}</div>
+					<div class="col-lg-3">{{i.user}}</div>
 				</div>
 			{% endfor %}
 		</div>
-		<div class="col-lg-3"></div>
+		<div class="col-lg-2"></div>
 		
 	</div>
 </div>

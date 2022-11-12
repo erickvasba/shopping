@@ -74,10 +74,20 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE', 'parqueo2022db'),
+#         'USER': os.environ.get('MYSQL_USER', 'root'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'parqueo2022'),
+#         'HOST': os.environ.get('MYSQL_DATABASE_HOST', 'mysql'),
+#         'PORT': os.environ.get('MYSQL_DATABASE_PORT', 3306),
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'db',
     }
 }
 

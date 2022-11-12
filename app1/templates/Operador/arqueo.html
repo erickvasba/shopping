@@ -23,11 +23,15 @@
 
 
 	}
-	#table_header{
+	#table_head{
 		background-color: rgba(23,30,123,0.7);
 		padding-top: 5px;
 		color:#eee;
 		text-align: center;
+
+	}
+	#table_head div{
+		border-left: 1px solid #ccc;
 
 	}
 	#data{
@@ -67,24 +71,26 @@
 
 	<div class="row">
 		<div class="col-lg-10">
-			<h2>Arqueo dia {{fecha}}</h2>
+			<h2>Arqueo {{fecha}}</h2>
 		</div>
 		<div class="col-lg-2"><a href="{% url 'home'%}">Atras</a></div>
 	</div>
 	<hr>
 	<div class="row" >
 		<div class="col-lg-8">
-			<div class="row" id="table_header">
-				<div class="col-lg-3"><h5>Matrícula</h5></div>
-				<div class="col-lg-3" style="border-right: #eee solid 2px; border-left: #eee solid 2px;"><h5>Pago en Bs.</h5></div>
-				<div class="col-lg-6"><h5>Fecha Pago</h5></div>
+			<div class="row" id="table_head">
+				<div class="col-lg-2"><h5>Id</h5></div>
+				<div class="col-lg-2"><h5>Matrícula</h5></div>
+				<div class="col-lg-3"><h5>Pago en Bs.</h5></div>
+				<div class="col-lg-5"><h5>Fecha Pago</h5></div>
 				
 			</div>
 			{% for i in p %}
 				<div class="row" id="data">
-					<div class="col-lg-3">{{i.matricula}}</div>
+					<div class="col-lg-2">{{i.id}}</div>
+					<div class="col-lg-2">{{i.matricula}}</div>
 					<div class="col-lg-3">{{i.pago}}</div>
-					<div class="col-lg-6">{{i.fecha}}</div>
+					<div class="col-lg-5">{{i.fecha}}</div>
 				</div>
 			{% endfor %}
 		</div>

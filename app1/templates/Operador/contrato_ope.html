@@ -1,4 +1,4 @@
-{% extends 'Admin/base_admin.html'%}
+{% extends 'Operador/base_admin.html'%}
 {% load static %}
 {% block title %}Contrato{% endblock %}
 
@@ -13,9 +13,6 @@
 		<div class="col-lg-10">
 			<h2>Contrato de Parking</h2>
 		</div>
-		{% ifequal grupo 'Operador' %}
-		<a href="{% url 'home'%}">Atras</a>
-		{% endifequal %}
 	</div>
 
 	<div class="row">
@@ -40,18 +37,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		var grupo='{{grupo}}';
-		console.log(grupo);
-
-		if(grupo==='Operador'){
-			$("#inicio").hide();
-			$("#arqueo").hide();
-			$("#mod_in").hide();
-			$("#mod_out").hide();
-		}
-
 		$("#id_obs").css('height','80px').css('width','290px');
-		$("#id_matricula").attr('placeholder','123-ABC');
 
 
 		$( function() {

@@ -1,4 +1,4 @@
-{% extends 'Admin/base_admin.html'%}
+{% extends 'Operador/base_admin.html'%}
 
 {% block title%}Contratos{% endblock %}
 
@@ -34,13 +34,8 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-lg-10">
+		<div class="col-lg-12">
 			<h2>Contratos </h2>
-		</div>
-		<div class="col-lg-2">
-		{% ifequal grupo 'Operador' %}
-			<a href="{% url 'home'%}">Atras</a>
-		{% endifequal %}
 		</div>
 	</div>
 
@@ -80,22 +75,4 @@
 		</div>
 	</div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		var grupo='{{grupo}}';
-		console.log(grupo);
-
-		if(grupo==='Operador'){
-			$("#inicio").hide();
-			$("#arqueo").hide();
-			$("#mod_in").hide();
-			$("#mod_out").hide();
-		}
-
-	});
-</script>
 {% endblock %}

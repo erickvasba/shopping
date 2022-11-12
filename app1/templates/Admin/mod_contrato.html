@@ -1,0 +1,51 @@
+{% extends 'Admin/base_admin.html'%}
+
+{% block title %}Modificar{% endblock%}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-10">
+			<h3>Modificar Contrato</h3>
+		</div>
+		<div class="col-lg-2">
+		{% ifequal grupo 'Operador' %}
+			<a href="{% url 'home'%}">Atras</a>
+		{% endifequal %}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<form action="{% url 'contratos_all'%}" method ="post">
+				{% csrf_token %}
+				<table>
+					{{g}}
+				</table>
+				<input type="submit" name="" value="Guardar">
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		var grupo='{{grupo}}';
+		
+
+		if(grupo==='Operador'){
+			$("#inicio").hide();
+			$("#arqueo").hide();
+			$("#mod_in").hide();
+			$("#mod_out").hide();
+		}
+
+		$("#id_matricula").attr('readonly','readonly');
+		$("#id_obs").css('height','80px').css('width','290px');
+
+	})
+</script>
+{% endblock %}

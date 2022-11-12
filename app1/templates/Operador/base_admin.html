@@ -1,8 +1,8 @@
 {% load static%}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1,hrink-to-fit=no">
 	<title>{%block title%}{% endblock%}</title>
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -32,22 +32,24 @@
 	
 	a{
 		text-decoration: none;
-		color: #fff;
+		
+		font-size: 15px;
 		
 
 	}
 	a:hover{
 		text-decoration: none;
-		color:#fff;
+		
+		
 	}
 
-	ul{
+	#ul_id{
 			list-style-type: none;
 	padding: 0;
 
 
 	}
-	ul li{
+	#ul_id li{
 		
 			font-size: 23px;
 	font-family: sans-serif;
@@ -63,24 +65,8 @@
 	cursor: pointer;
 
 	}
-	ul li a {
-	color: white;
-	mix-blend-mode: difference;
-	}
-	ul li::before {
-	content: '';
-	position: absolute;
-	width: 2.2em;
-	height: inherit;
-	background-color: #ddd;
-	border-radius: 35%;
-	top: 0;
-	left: -1.4em;
-	transition: 0.4s ease-out;
-	}
 
- ul li:hover::before {
-	transform: scale(7);
+
 
 }
 	#usuario{
@@ -109,21 +95,18 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-lg-2">
-				<small id="usuario">User:</small>
+				<small id="usuario">User:{{user}}</small>
 			</div>
 		</div>
+
+
 		<div class="row">
 			<div class="col-lg-2">
-				<ul>
-					<li><a href="{% url 'administrador'%}">Inicio</a></li>
-					<li><a href="">Reportes</a></li>
-					<li><a href="{% url 'ingresos'%}">Ingresos</a></li>
-					<li><a href="">Matriculas</a></li>
-					<li><a href="">Usuarios</a></li>
-					<li><a href="">Consultas</a></li>
+				<ul id="ul_id">
+					
+					<li><a href="{% url 'contrato'%}">Nuevo Contrato</a></li>
+					<li><a href="{% url 'contratos_all'%}">Contratos</a></li>
 				</ul>
-
-				
 			</div>
 			<div class="col-lg-10">
 				{% block content %}
